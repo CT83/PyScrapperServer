@@ -1,4 +1,6 @@
 import os
+from shutil import copy
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -56,6 +58,12 @@ def main(book_url, website):
     f.write(book.encode('ascii', 'ignore'))
     f.close()
     os.system('python txt2pdf.py ' + book_name + '.txt')
+    os.rename('output.pdf', book_name + '.pdf')
+    copy(book_name + '.pdf', 'path')
+    print("File Copied to Path...")
+    os.remove(book_name + '.pdf')
+
+    return book_name + '.pdf'
 
 
 if __name__ == '__main__':
