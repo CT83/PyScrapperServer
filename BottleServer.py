@@ -1,6 +1,10 @@
-from bottle import get, post, request, run, route, template  # or route
+import os
+import sys
+
+from bottle import get, post, request, run, route  # or route
 from bottle import static_file
-from Scrapper import main, book_name
+
+from Scrapper import main
 
 webpage = """
 <html>
@@ -166,4 +170,5 @@ def server_static(filename):
     return static_file(filename, root='path')
 
 
-run(host='localhost', port=8080, debug=True, reloader=True)
+os.chdir(sys.path[0])
+run(host='0.0.0.0', port=8080, debug=True, reloader=True)

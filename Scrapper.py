@@ -1,11 +1,12 @@
 import os
+import sys
 from shutil import copy
 
 import requests
 from bs4 import BeautifulSoup
 
 book_name = ""
-
+os.chdir(sys.path[0])
 
 def url_generator(ch, url):
     print url
