@@ -62,6 +62,7 @@ def main(book_url, website):
     copy(book_name + '.pdf', 'path')
     print("File Copied to Path...")
     os.remove(book_name + '.pdf')
+    os.remove(book_name + '.txt')
 
     return book_name + '.pdf'
 

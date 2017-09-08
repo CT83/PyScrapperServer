@@ -1,24 +1,112 @@
-from bottle import get, post, request, run, route  # or route
+from bottle import get, post, request, run, route, template  # or route
 from bottle import static_file
 from Scrapper import main, book_name
 
+webpage = """
+<html>
+<meta http-equiv="refresh" content="5;URL=/">
+<style>
+form {
+    border: 3px solid #f1f1f1;
+}
 
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+ }
+</style>
+<body>
+
+<h2>Bottle Scrapper</h2>
+<form action="/download" method="post">
+  <div class="container">
+    <label><b>Book</b></label>
+    <input type="text" placeholder="Enter the Link of the Book" name="url" required>
+    <label><b>Website</b></label>
+    <select name="website">
+    <option value="0" selected>(please select:)</option>
+    <option value="readromancebook.com">www.readromancebook.com</option>
+    <option value="2">two</option>
+    <option value="3">three</option>
+    <option value="other">other, please specify:</option>
+    </select>
+    
+    <button value="Download" type="submit">Login</button>
+  </div>
+ </form>
+</body>
+</html>
+
+"""
 @get('/')  # or @route('/login')
 def homepage():
-    return '''
-        <form action="/download" method="post">
-            URL: <input name="url" type="text" />
-            Website: <input name="website" type="text" />
-            <input value="Download" type="submit" />
-        </form>
-    '''
+    return webpage
+
+
+@route('/status', method='GET')
+def result():
+    pass
 
 
 @post('/download')
 def download():
     url = request.forms.get('url')
     website = request.forms.get('website')
-    file = main(url, 'readromancebook.com')
+    file = main(url,website)
+    print("Submitted URL:"+url)
+    print("Submitted Website:"+website)
+    return template('download_status', name='Rohan')
     return "<a href='/static/out/" + file + "'>Download</a>"
 
 
