@@ -2,12 +2,23 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+book_name = ""
+
 
 def url_generator(ch, url):
     print url
     if ch == 'readromancebook.com':
         url = url[:-5]
         url += "/"
+        global book_name
+        book_name = url
+        y = book_name.replace("http://www.readromancebook.com/books/", '')
+        book_name = y
+        y = book_name.replace(".html", '')
+        book_name = y
+        book_name = book_name.rstrip('/')
+
+    print ("Book Name:" + book_name)
     print ("Url after Generation:" + url)
     return url
 
@@ -36,8 +47,16 @@ def scrape_book(url):
     return book_text
 
 
-book = scrape_book(url_generator('readromancebook.com', "http://www.readromancebook.com/books/The_Reformed_Bad_Boys_Baby.html"))
-f = open('FinalBook1.txt', 'w')
-f.write(book.encode('ascii', 'ignore'))
-f.close()
-os.system('python txt2pdf.py FinalBook1.txt')
+def main(book_url, website):
+    if book_url == "" and website == "":
+        book_url = "http://www.readromancebook.com/books/Devil_in_Texas.html"
+        website = 'readromancebook.com'
+    book = scrape_book(url_generator(website, book_url))
+    f = open(book_name + '.txt', 'w')
+    f.write(book.encode('ascii', 'ignore'))
+    f.close()
+    os.system('python txt2pdf.py ' + book_name + '.txt')
+
+
+if __name__ == '__main__':
+    main("", "")
