@@ -21,9 +21,10 @@ def result():
 def download():
     url = request.forms.get('url')
     website = request.forms.get('website')
-    download_link, error = main(url, website)
     print("Submitted URL:" + url)
     print("Submitted Website:" + website)
+    download_link, error = main(url, website)
+    print("Download Link:" + download_link)
     # return template('download_status', name='Rohan')
     download_webpage = '''
     <html>

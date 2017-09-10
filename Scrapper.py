@@ -42,7 +42,7 @@ def scrape_book(url, bk_name=""):
             else:
                 r = requests.get(url + str(counter) + ".html")
             if r.status_code == 200:  # Page Successfully Loaded
-                book_text += "\n\nPage " + str(counter)
+                # book_text += "\n\nPage " + str(counter)
                 soup = BeautifulSoup(r.content, "html.parser")
                 reading_area = soup.find('div', attrs={'class': 'viewport', 'style': 'height:auto'})
                 book_text += reading_area.text
@@ -74,4 +74,3 @@ def main(book_url, website):
 
 if __name__ == '__main__':
     main("", "")
-
