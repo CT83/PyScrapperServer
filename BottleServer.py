@@ -6,6 +6,86 @@ from bottle import static_file
 
 from Scrapper import main
 
+
+@get('/')  # or @route('/login')
+def homepage():
+    return webpage
+
+
+@route('/status', method='GET')
+def result():
+    pass
+
+
+@post('/download')
+def download():
+    url = request.forms.get('url')
+    website = request.forms.get('website')
+    download_link, error = main(url, website)
+    print("Submitted URL:" + url)
+    print("Submitted Website:" + website)
+    # return template('download_status', name='Rohan')
+    download_webpage = '''
+    <html>
+    <style>
+    form {
+        border: 3px solid #f1f1f1;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    span.psw {
+        float: right;
+        padding-top: 16px;
+    }
+
+    /* Change styles for span and cancel button on extra small screens */
+    @media screen and (max-width: 300px) {
+        span.psw {
+           display: block;
+           float: none;
+        }
+     }
+    </style>
+    <body>
+
+    <h2>Bottle Scrapper</h2>
+    <form action=/static/out/''' + download_link + '''>
+      <div class="container">
+        <button value="Download" type="submit">Download</button>
+      </div>
+     </form>
+    </body>
+    </html>
+    '''
+
+    if error:
+        return "<h1>Error has Occurred!</h2>"
+    else:
+        return download_webpage
+
+
+@route('/static/out/<filename>')
+def server_static(filename):
+    return static_file(filename, root='path')
+
+
 webpage = """
 <html>
 <style>
@@ -84,7 +164,7 @@ span.psw {
     <option value="3">three</option>
     <option value="other">other, please specify:</option>
     </select>
-    
+
     <button value="Download" type="submit">Begin Scraping</button>
   </div>
  </form>
@@ -92,83 +172,5 @@ span.psw {
 </html>
 
 """
-
-
-@get('/')  # or @route('/login')
-def homepage():
-    return webpage
-
-
-@route('/status', method='GET')
-def result():
-    pass
-
-
-@post('/download')
-def download():
-    url = request.forms.get('url')
-    website = request.forms.get('website')
-    file = main(url, website)
-    print("Submitted URL:" + url)
-    print("Submitted Website:" + website)
-    # return template('download_status', name='Rohan')
-    download_webpage = '''
-    <html>
-    <style>
-    form {
-        border: 3px solid #f1f1f1;
-    }
-
-    button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-    }
-
-    button:hover {
-        opacity: 0.8;
-    }
-
-    .container {
-        padding: 16px;
-    }
-
-    span.psw {
-        float: right;
-        padding-top: 16px;
-    }
-
-    /* Change styles for span and cancel button on extra small screens */
-    @media screen and (max-width: 300px) {
-        span.psw {
-           display: block;
-           float: none;
-        }
-     }
-    </style>
-    <body>
-
-    <h2>Bottle Scrapper</h2>
-    <form action=/static/out/''' + file + '''>
-      <div class="container">
-        <button value="Download" type="submit">Download</button>
-      </div>
-     </form>
-    </body>
-    </html>
-    '''
-    return download_webpage
-    # return "<a href='/static/out/" + file + "'>Download</a>"
-
-
-@route('/static/out/<filename>')
-def server_static(filename):
-    return static_file(filename, root='path')
-
-
 os.chdir(sys.path[0])
 run(host='0.0.0.0', port=8080, debug=True, reloader=True)
