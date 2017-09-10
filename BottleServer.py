@@ -161,11 +161,8 @@ span.psw {
     <select name="website">
     <option value="0">(please select:)</option>
     <option value="readromancebook.com" selected>www.readromancebook.com</option>
-    <option value="2">two</option>
-    <option value="3">three</option>
-    <option value="other">other, please specify:</option>
+    <option value="offcampus.freebooks2017.org">offcampus.freebooks2017.org</option>
     </select>
-
     <button value="Download" type="submit">Begin Scraping</button>
   </div>
  </form>
