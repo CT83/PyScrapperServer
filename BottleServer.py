@@ -76,7 +76,7 @@ def download():
     '''
 
     if error:
-        return "<h1>Error has Occurred!</h2>"
+        return "<script>alert('An Error has Occurred! Please check your internet connection and Try again!');</script>"
     else:
         return download_webpage
 

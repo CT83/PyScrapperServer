@@ -33,28 +33,33 @@ def scrape_book(url):
     counter = 1
     iteration = 0
     book_text = ""
-    while True or iteration < 2000:
-        iteration += 1
-        if counter == 1:
-            r = requests.get(url[:-1] + ".html")
-            # print("Page 1 Url:" + r.url)
-        else:
-            r = requests.get(url + str(counter) + ".html")
-        if r.status_code == 200:  # Page Successfully Loaded
-            book_text += "\n\nPage " + str(counter)
-            soup = BeautifulSoup(r.content, "html.parser")
-            reading_area = soup.find('div', attrs={'class': 'viewport', 'style': 'height:auto'})
-            book_text += reading_area.text
-            # print(book_text)
-            # print("Scrapped Page: " + str(counter))
-            counter = counter + 1
-        elif r.status_code == 404:  # Reached End of Book
-            break
-        else:
-            error = True
-            break
-        if iteration % 14 == 0:
-            print("Scrapping Page:" + str(counter))
+    try:
+        while True or iteration < 2000:
+            iteration += 1
+            if counter == 1:
+                r = requests.get(url[:-1] + ".html")
+                # print("Page 1 Url:" + r.url)
+            else:
+                r = requests.get(url + str(counter) + ".html")
+            if r.status_code == 200:  # Page Successfully Loaded
+                book_text += "\n\nPage " + str(counter)
+                soup = BeautifulSoup(r.content, "html.parser")
+                reading_area = soup.find('div', attrs={'class': 'viewport', 'style': 'height:auto'})
+                book_text += reading_area.text
+                # print(book_text)
+                # print("Scrapped Page: " + str(counter))
+                counter = counter + 1
+            elif r.status_code == 404:  # Reached End of Book
+                break
+            else:
+                error = True
+                print("Error has Occurred")
+                break
+            if iteration % 14 == 0:
+                print("Scrapping Page:" + str(counter))
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        print("Error :" + str(e))
+        error = True
     return book_text, error
 
 
