@@ -10,7 +10,6 @@ os.chdir(sys.path[0])
 
 
 def url_generator(ch, url):
-    print url
     if ch == 'readromancebook.com':
         url = url[:-5]
         url += "/"
@@ -27,7 +26,7 @@ def url_generator(ch, url):
     return url
 
 
-def scrape_book(url):
+def scrape_book(url, bk_name=""):
     print("Scrapping book at:" + url)
     error = False
     counter = 1
@@ -38,7 +37,7 @@ def scrape_book(url):
             iteration += 1
             if counter == 1:
                 r = requests.get(url[:-1] + ".html")
-                # print("Page 1 Url:" + r.url)
+                book_text += bk_name.replace('_', ' ') + '\n\n'
             else:
                 r = requests.get(url + str(counter) + ".html")
             if r.status_code == 200:  # Page Successfully Loaded
@@ -46,8 +45,6 @@ def scrape_book(url):
                 soup = BeautifulSoup(r.content, "html.parser")
                 reading_area = soup.find('div', attrs={'class': 'viewport', 'style': 'height:auto'})
                 book_text += reading_area.text
-                # print(book_text)
-                # print("Scrapped Page: " + str(counter))
                 counter = counter + 1
             elif r.status_code == 404:  # Reached End of Book
                 break
@@ -63,23 +60,36 @@ def scrape_book(url):
     return book_text, error
 
 
+def clean_prev(bk_name):
+    try:
+        os.remove(bk_name + '.pdf')
+        os.remove(bk_name + '.txt')
+    except OSError as e:
+        pass
+
+
+def write_convert_and_rename(bk_text, bk_name=""):
+    clean_prev(bk_name)
+    f = open(bk_name + '.txt', 'w')
+    f.write(bk_text.encode('ascii', 'ignore'))
+    f.close()
+    os.system('python txt2pdf.py ' + bk_name + '.txt')
+    os.rename('output.pdf', bk_name + '.pdf')
+    copy(bk_name + '.pdf', 'path')
+    clean_prev(bk_name)
+
+
 def main(book_url, website):
     if book_url == "" and website == "":
         book_url = "http://www.readromancebook.com/books/Devil_in_Texas.html"
         website = 'readromancebook.com'
-    book, error = scrape_book(url_generator(website, book_url))
-    f = open(book_name + '.txt', 'w')
-    f.write(book.encode('ascii', 'ignore'))
-    f.close()
-    os.system('python txt2pdf.py ' + book_name + '.txt')
-    os.rename('output.pdf', book_name + '.pdf')
-    copy(book_name + '.pdf', 'path')
-    os.remove(book_name + '.pdf')
-    os.remove(book_name + '.txt')
+    book_content, error = scrape_book(url_generator(website, book_url), book_name)
     if error:
         print("Error Occurred!")
+    write_convert_and_rename(book_content, book_name)
     return book_name + '.pdf', error
 
 
 if __name__ == '__main__':
     main("", "")
+
