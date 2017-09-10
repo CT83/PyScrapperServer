@@ -5,7 +5,7 @@ from shutil import copy
 def clean_prev(bk_name):
     try:
         os.remove(bk_name + '.pdf')
-        # os.remove(bk_name + '.txt')
+        os.remove(bk_name + '.txt')
     except OSError as e:
         pass
 
