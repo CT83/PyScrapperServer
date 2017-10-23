@@ -1,5 +1,6 @@
 import os
 import sys
+import threading
 from HTMLParser import HTMLParser
 
 import requests
@@ -68,10 +69,14 @@ def get_link_offcampus(url, counter):
     return requests.get(url + '/index_' + str(counter) + ".html")
 
 
+iteration = 0
+
+
 def scrape_book(s_url, bk_name="", s_tag="div", s_class_name='viewport', s_style_name='height:auto'):
     print("Scrapping book at:" + s_url)
     error = False
     counter = 1
+    global iteration
     iteration = 0
     book_text = ""
     try:
@@ -121,3 +126,20 @@ def main(book_url, website):
 
 if __name__ == '__main__':
     main("", "")
+
+
+class ScrapperThread(threading.Thread):
+    def __init__(self, url, website):
+        threading.Thread.__init__(self)
+        self.url = url
+        self.website = website
+        self.downloadLink = ""
+        self.error = ""
+
+    def run(self):
+        print "Scrapping from Separate Thread"
+        self.downloadLink, self.error = main(self.url, self.website)
+
+    def watchProgress(self):
+        progress = str(iteration)
+        return progress

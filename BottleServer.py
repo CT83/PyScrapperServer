@@ -1,10 +1,11 @@
 import os
 import sys
+import time
 
 from bottle import get, post, request, run, route  # or route
 from bottle import static_file
 
-from Scrapper import main
+from Scrapper import ScrapperThread
 
 
 @get('/')  # or @route('/login')
@@ -23,8 +24,19 @@ def download():
     website = request.forms.get('website')
     print("Submitted URL:" + url)
     print("Submitted Website:" + website)
-    download_link, error = main(url, website)
-    print("Download Link:" + download_link)
+    yield "Downloading Page:"
+
+    # download_link, error = main(url, website)
+
+    thread1 = ScrapperThread(url, website)
+    thread1.start()
+    print "Watching Progress..."
+    while thread1.is_alive():
+        time.sleep(3)
+        yield thread1.watchProgress() + "\n"
+    thread1.join()
+
+    print("Download Link:" + thread1.downloadLink)
     # return template('download_status', name='Rohan')
     download_webpage = '''
     <html>
@@ -67,7 +79,7 @@ def download():
     <body>
 
     <h2>Bottle Scrapper</h2>
-    <form action=/static/out/''' + download_link + '''>
+    <form action=/static/out/''' + thread1.downloadLink + '''>
       <div class="container">
         <button value="Download" type="submit">Download</button>
       </div>
@@ -76,10 +88,10 @@ def download():
     </html>
     '''
 
-    if error:
-        return "<script>alert('An Error has Occurred! Please check your internet connection and Try again!');</script>"
+    if thread1.error:
+        yield "<script>alert('An Error has Occurred! Please check your internet connection and Try again!');</script>"
     else:
-        return download_webpage
+        yield download_webpage
 
 
 @route('/static/out/<filename>')
