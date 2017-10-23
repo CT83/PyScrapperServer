@@ -24,7 +24,7 @@ def download():
     website = request.forms.get('website')
     print("Submitted URL:" + url)
     print("Submitted Website:" + website)
-    yield "Downloading Page:"
+    yield "<b>Pages Downloaded</b><br>"
 
     # download_link, error = main(url, website)
 
@@ -33,7 +33,7 @@ def download():
     print "Watching Progress..."
     while thread1.is_alive():
         time.sleep(3)
-        yield thread1.watchProgress() + "\n"
+        yield thread1.watchProgress() + "<br>"
     thread1.join()
 
     print("Download Link:" + thread1.downloadLink)
