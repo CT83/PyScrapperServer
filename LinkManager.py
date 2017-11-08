@@ -37,4 +37,14 @@ def store_book_links_to_csv(url, pages, file_name):
                         print(e)
 
 
-store_book_links_to_csv("http://www.readromancebook.com/books/", 78, "Books_Links.csv")
+def downloader(file_name):
+    with open(file_name, 'rb') as csv_f:
+        reader = csv.reader(csv_f, delimiter=',')
+        for row in reader:
+            bk_name = row[0]
+            bk_link = row[1]
+            print bk_name + " " + bk_link
+
+
+# store_book_links_to_csv("http://www.readromancebook.com/books/", 78, "Books_Links.csv")
+downloader("Books_Links.csv")
