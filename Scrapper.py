@@ -138,5 +138,5 @@ class ScrapperThread(threading.Thread):
         print "Scrapping from Separate Thread"
         self.downloadLink, self.error = main(self.url, self.website)
 
-    def watchProgress(self):
+    def watch_progress(self):
         return str(progress)

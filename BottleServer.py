@@ -28,15 +28,15 @@ def download():
 
     # download_link, error = main(url, website)
 
-    thread1 = ScrapperThread(url, website)
-    thread1.start()
+    thread = ScrapperThread(url, website)
+    thread.start()
     print "Watching Progress..."
-    while thread1.is_alive():
+    while thread.is_alive():
         time.sleep(3)
-        yield thread1.watchProgress() + "<br>"
-    thread1.join()
+        yield thread.watch_progress() + "<br>"
+    thread.join()
 
-    print("Download Link:" + thread1.downloadLink)
+    print("Download Link:" + thread.downloadLink)
     # return template('download_status', name='Rohan')
     download_webpage = '''
     <html>
@@ -79,7 +79,7 @@ def download():
     <body>
 
     <h2>Bottle Scrapper</h2>
-    <form action=/static/out/''' + thread1.downloadLink + '''>
+    <form action=/static/out/''' + thread.downloadLink + '''>
       <div class="container">
         <button value="Download" type="submit">Download</button>
       </div>
@@ -88,7 +88,7 @@ def download():
     </html>
     '''
 
-    if thread1.error:
+    if thread.error:
         yield "<script>alert('An Error has Occurred! Please check your internet connection and Try again!');</script>"
     else:
         yield download_webpage
