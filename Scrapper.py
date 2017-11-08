@@ -10,6 +10,7 @@ from FileManagement import write_convert_and_rename
 
 book_name = ""
 os.chdir(sys.path[0])
+progress = 0
 
 
 def url_generator(ch, t_url):
@@ -69,19 +70,16 @@ def get_link_offcampus(url, counter):
     return requests.get(url + '/index_' + str(counter) + ".html")
 
 
-iteration = 0
-
-
 def scrape_book(s_url, bk_name="", s_tag="div", s_class_name='viewport', s_style_name='height:auto'):
     print("Scrapping book at:" + s_url)
     error = False
     counter = 1
-    global iteration
-    iteration = 0
+    global progress
+    progress = 0
     book_text = ""
     try:
-        while True or iteration < 2000:
-            iteration += 1
+        while True or progress < 2000:
+            progress += 1
             if counter == 1:
                 # remove '/' and add .html to the page
                 if 'readromancebook' in s_url:
@@ -107,7 +105,7 @@ def scrape_book(s_url, bk_name="", s_tag="div", s_class_name='viewport', s_style
                 error = True
                 print("Error has Occurred")
                 break
-            if iteration % 14 == 0:
+            if progress % 14 == 0:
                 print("Scrapping Page:" + str(counter))
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print("Error :" + str(e))
@@ -141,5 +139,4 @@ class ScrapperThread(threading.Thread):
         self.downloadLink, self.error = main(self.url, self.website)
 
     def watchProgress(self):
-        progress = str(iteration)
-        return progress
+        return str(progress)
