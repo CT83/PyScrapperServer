@@ -5,7 +5,7 @@ import time
 from bottle import get, post, request, run, route  # or route
 from bottle import static_file
 
-from Scrapper import ScrapperThread
+from Scrapper import ScrapperThread, watch_progress
 
 
 @get('/')  # or @route('/login')
@@ -33,7 +33,7 @@ def download():
     print "Watching Progress..."
     while thread.is_alive():
         time.sleep(3)
-        yield thread.watch_progress() + "<br>"
+        yield watch_progress() + "<br>"
     thread.join()
 
     print("Download Link:" + thread.downloadLink)

@@ -126,6 +126,10 @@ if __name__ == '__main__':
     main("", "")
 
 
+def watch_progress():
+    return str(progress)
+
+
 class ScrapperThread(threading.Thread):
     def __init__(self, url, website):
         threading.Thread.__init__(self)
@@ -137,6 +141,3 @@ class ScrapperThread(threading.Thread):
     def run(self):
         print "Scrapping from Separate Thread"
         self.downloadLink, self.error = main(self.url, self.website)
-
-    def watch_progress(self):
-        return str(progress)
