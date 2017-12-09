@@ -8,6 +8,8 @@ This project was entirely created on a Friday when I called in sick from College
 The code is run on a Raspberry Pi connected to the local WiFi connection, preferably using  a Static IP. The user accesses the Web Interfaces hosted on the Pi and then pastes the link of the EBook that he wishes to download. The Ebook is then scrapped off the Link provided by the user. It is further converted to PDF format for easy reading.
 <em><b>tl;dr</b>&nbsp;  Web Server which Scrapes the Web.</em>
 
+ <img src="bottle_scrapper.PNG">
+
 <b>How to Install?</b>
 1. Clone this Repo
 2. Install Dependencies  <br/>`sudo pip install reportlab requests bs4 python-dev install bottle`
