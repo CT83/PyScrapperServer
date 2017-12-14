@@ -46,11 +46,11 @@ def url_generator(ch, t_url):
         class_name = 'text'
         style_name = ''
 
-    print ("Book Name:" + book_name)
-    print ('t_url:' + t_url)
-    print ('tag:' + tag)
-    print ('class_name:' + class_name)
-    print('style_name:' + style_name)
+    # print ("Book Name:" + book_name)
+    # print ('t_url:' + t_url)
+    # print ('tag:' + tag)
+    # print ('class_name:' + class_name)
+    # print('style_name:' + style_name)
     return t_url, tag, class_name, style_name
 
 
@@ -71,7 +71,7 @@ def get_link_offcampus(url, counter):
 
 
 def scrape_book(s_url, bk_name="", s_tag="div", s_class_name='viewport', s_style_name='height:auto'):
-    print("Scrapping book at:" + s_url)
+    # print("Scrapping book at:" + s_url)
     error = False
     counter = 1
     global progress
@@ -105,8 +105,8 @@ def scrape_book(s_url, bk_name="", s_tag="div", s_class_name='viewport', s_style
                 error = True
                 print("Error has Occurred")
                 break
-            if progress % 14 == 0:
-                print("Scrapping Page:" + str(counter))
+                # if progress % 14 == 0:
+                # print("Scrapping Page:" + str(counter))
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print("Error :" + str(e))
         error = True
